@@ -4,6 +4,7 @@ const router = express();
 // 引入模型
 const User = require("../models/User");
 const Category = require("../models/Category");
+const Content = require("../models/Content");
 
 router.use(function (req, res, next) {
     
@@ -56,7 +57,7 @@ router.get("/user", function (req, res, next) {
 
         
         User.find().limit(limit).skip(skip).then(function (users) {
-            res.render("admin/user.html", {
+            res.render("admin/user", {
                 userinfo: req.userinfo,
                 users: users,
 
@@ -96,7 +97,7 @@ router.get("/category", function (req, res, next) {
 
         // sort() 方法可以用来排序（1 表示升序，-1 表示降序）
         Category.find().sort({_id: -1}).limit(limit).skip(skip).then(function (categories) {
-            res.render("admin/category_index.html", {
+            res.render("admin/category_index", {
                 userinfo: req.userinfo,
                 categories: categories,
 
@@ -268,9 +269,35 @@ router.get("/category/delete", function (req, res) {
 // 内容首页
 router.get("/content", function (req, res) {
     
-    res.render("admin/content_index", {
-        userinfo: req.userinfo
+    // 同用户管理
+    var page = Number(req.query.page || 1);
+    var limit = 2;
+    var pages = 0;
+
+    Content.count().then(function (count) {
+
+        // 限定页数范围
+        pages = Math.ceil(count / limit);
+        page = Math.min(page, pages);
+        page = Math.max(page, 1);
+
+        var skip = (page - 1) * limit;
+
+        // sort() 方法可以用来排序（1 表示升序，-1 表示降序）
+        Content.find().sort({_id: -1}).limit(limit).skip(skip).then(function (contents) {
+            res.render("admin/content_index", {
+                userinfo: req.userinfo,
+                contents: contents,
+
+                count: count,
+                limit: limit,
+                pages: pages,
+                page: page,
+                link: "/admin/content"
+            })
+        })
     })
+
 })
 
 // 内容添加页面
@@ -283,6 +310,40 @@ router.get("/content/add", function (req, res) {
         })
     })
     
+})
+
+// 内容保存
+router.post("/content/add", function (req, res) {
+
+    // 验证分类
+    if (req.body.category == "") {
+        res.render("admin/error", {
+            userinfo: req.userinfo,
+            message: "分类不能为空"
+        })
+    }
+
+    // 验证标题
+    if (req.body.title == "") {
+        res.render("admin/error", {
+            userinfo: req.userinfo,
+            message: "标题不能为空"
+        })
+    }
+
+    // 保存内容到数据库
+    new Content({
+        category: req.body.category,
+        title: req.body.title,
+        description: req.body.description,
+        content: req.body.content
+    }).save().then(function (rs) {
+        res.render("admin/success", {
+            userinfo: req.userinfo,
+            message: "保存成功",
+            url: "/admin/content"
+        })
+    })
     
 })
 
