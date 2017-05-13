@@ -20,6 +20,10 @@ router.get("/", function (req, res, next) {
     })
 })
 
+
+/**
+ *  ========================  用户管理相关操作  ========================
+ */
 // 用户管理
 router.get("/user", function (req, res, next) {
 
@@ -50,6 +54,7 @@ router.get("/user", function (req, res, next) {
          // 获取数据的时候忽略前面多少条
         var skip = (page - 1) * limit;
 
+        
         User.find().limit(limit).skip(skip).then(function (users) {
             res.render("admin/user.html", {
                 userinfo: req.userinfo,
@@ -68,6 +73,10 @@ router.get("/user", function (req, res, next) {
 })
 
 
+
+/**
+ *  ========================  分类相关操作  ========================
+ */
 // 分类首页
 router.get("/category", function (req, res, next) {
     
@@ -85,7 +94,8 @@ router.get("/category", function (req, res, next) {
 
         var skip = (page - 1) * limit;
 
-        Category.find().limit(limit).skip(skip).then(function (categories) {
+        // sort() 方法可以用来排序（1 表示升序，-1 表示降序）
+        Category.find().sort({_id: -1}).limit(limit).skip(skip).then(function (categories) {
             res.render("admin/category_index.html", {
                 userinfo: req.userinfo,
                 categories: categories,
@@ -149,7 +159,6 @@ router.post("/category/add", function (req, res, next) {
 
 })
 
-
 // 修改分类
 router.get("/category/edit", function (req, res) {
 
@@ -173,7 +182,6 @@ router.get("/category/edit", function (req, res) {
         }
     })
 })
-
 
 // 分类编辑
 router.post("/category/edit", function (req, res) {
@@ -234,8 +242,6 @@ router.post("/category/edit", function (req, res) {
 
 })
 
-
-
 // 删除分类
 router.get("/category/delete", function (req, res) {
 
@@ -253,6 +259,30 @@ router.get("/category/delete", function (req, res) {
     })
 
 })
+
+
+
+/**
+ *  ========================  文章内容相关操作  ========================
+ */
+// 内容首页
+router.get("/content", function (req, res) {
+    
+    res.render("admin/content_index", {
+        userinfo: req.userinfo
+    })
+})
+
+// 内容添加页面
+router.get("/content/add", function (req, res) {
+    
+    res.render("admin/content_add", {
+        userinfo: req.userinfo
+    })
+})
+
+
+
 
 
 module.exports = router;

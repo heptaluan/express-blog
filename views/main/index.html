@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="/public/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/public/css/main.css">
-    <script src="/public/js/jquery.js"></script>
-    <script src="/public/js/index.js"></script>
+    <title>后台管理</title>
 </head>
+
 <body>
+    <div>
+        <header class="header-bar">
+            <img src="http://p1.bqimg.com/567571/b917b3d73b0e1da7.png" alt="">
+        </header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <ul class="nav navbar-nav">
+                    
+                    {% for categories in category %}
+
+                    <li>
+                        <a href="/">{{ categories.cateName }}</a>
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </nav>
+    </div>
 
     {% if userinfo._id %}
     <div class="msg">
@@ -55,8 +76,23 @@
 
     {% endif %}
 
-    
-    
 
+    <!--<div class="container container-fluid">
+        <div class="row">
+            <main class="col-md-8">
+
+            </main>
+            <aside class="col-md-4">
+
+            </aside>
+        </div>
+    </div>
+    <footer></footer>-->
+
+    <script src="/public/js/jquery.js"></script>
+    <script src="/public/js/index.js"></script>
+    <script src="/public/bootstrap/js/bootstrap.min.js"></script>
+    <!--<script src="/public/js/main.js"></script>-->
 </body>
+
 </html>

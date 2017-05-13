@@ -1,10 +1,14 @@
 const express = require("express");
 const router = express();
+const Category = require("../models/Category");
 
 router.get("/", (req, res, next) => {
     
-    res.render("main/index", {
-        userinfo: req.userinfo
+    Category.find().then(function (categories) {
+        res.render("main/index", {
+            userinfo: req.userinfo,
+            category: categories
+        })
     })
 
 })
