@@ -14,10 +14,10 @@
         <div class="form-group">
             <label for="title">分类</label>
             <select name="categort" id="category" class="form-control">
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
-                <option value="">4</option>
+                
+                {% for category in categories %}
+                <option value="{{category.id}}">{{ category.cateName}}</option>
+                {% endfor %}
             </select>
         </div>
 

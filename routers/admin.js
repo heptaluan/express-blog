@@ -275,10 +275,15 @@ router.get("/content", function (req, res) {
 
 // 内容添加页面
 router.get("/content/add", function (req, res) {
-    
-    res.render("admin/content_add", {
-        userinfo: req.userinfo
+
+    Category.find().then(function (categories) {
+        res.render("admin/content_add", {
+            userinfo: req.userinfo,
+            categories: categories
+        })
     })
+    
+    
 })
 
 
