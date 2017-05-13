@@ -7,7 +7,7 @@ const Category = require("../models/Category");
 const Content = require("../models/Content");
 
 router.use(function (req, res, next) {
-    
+
     // 如果当前用户是非管理员
     if (!req.userinfo.isAdmin) {
         res.send("只有管理员才可以进入后台管理")
@@ -52,10 +52,10 @@ router.get("/user", function (req, res, next) {
         // page 取值也不能小于 1
         page = Math.max(page, 1);
 
-         // 获取数据的时候忽略前面多少条
+        // 获取数据的时候忽略前面多少条
         var skip = (page - 1) * limit;
 
-        
+
         User.find().limit(limit).skip(skip).then(function (users) {
             res.render("admin/user", {
                 userinfo: req.userinfo,
@@ -80,7 +80,7 @@ router.get("/user", function (req, res, next) {
  */
 // 分类首页
 router.get("/category", function (req, res, next) {
-    
+
     // 同用户管理
     var page = Number(req.query.page || 1);
     var limit = 2;
@@ -96,7 +96,7 @@ router.get("/category", function (req, res, next) {
         var skip = (page - 1) * limit;
 
         // sort() 方法可以用来排序（1 表示升序，-1 表示降序）
-        Category.find().sort({_id: -1}).limit(limit).skip(skip).then(function (categories) {
+        Category.find().sort({ _id: -1 }).limit(limit).skip(skip).then(function (categories) {
             res.render("admin/category_index", {
                 userinfo: req.userinfo,
                 categories: categories,
@@ -118,7 +118,7 @@ router.get("/category/add", function (req, res, next) {
     })
 })
 
-// 保存分类（post 请求的话接收提交过来的数据进行保存）
+// 保存分类（post 请求的话接收提交过来的数据进行保存）（save）
 router.post("/category/add", function (req, res, next) {
 
     var cateName = req.body.cateName || "";
@@ -160,7 +160,7 @@ router.post("/category/add", function (req, res, next) {
 
 })
 
-// 修改分类
+// 分类修改
 router.get("/category/edit", function (req, res) {
 
     // 获取要修改的分类信息，以表单形式展示
@@ -184,7 +184,7 @@ router.get("/category/edit", function (req, res) {
     })
 })
 
-// 分类编辑
+// 编辑后的分类保存（update）
 router.post("/category/edit", function (req, res) {
     var id = req.query.id;
     var cateName = req.body.cateName || "";
@@ -200,7 +200,7 @@ router.post("/category/edit", function (req, res) {
             })
             return Promise.reject();
         } else {
-            
+
             // 如果用户没有做任何修改直接点了保存
             if (cateName == category.cateName) {
                 res.render("admin/success", {
@@ -212,7 +212,7 @@ router.post("/category/edit", function (req, res) {
             } else {
                 // 判断一下修改后的分类在数据库中是否已经存在
                 return Category.findOne({
-                    _id: {$ne: id},
+                    _id: { $ne: id },
                     cateName: cateName
                 })
             }
@@ -226,12 +226,13 @@ router.post("/category/edit", function (req, res) {
             })
             return Promise.reject();
         } else {
-            // 更新数据
+            // 更新数据 update
+            // 参数有两个，第一个是条件，第二个是要保存的数据
             return Category.update({
                 _id: id
             }, {
-                cateName: cateName
-            })
+                    cateName: cateName
+                })
         }
     }).then(function () {
         res.render("admin/success", {
@@ -243,7 +244,7 @@ router.post("/category/edit", function (req, res) {
 
 })
 
-// 删除分类
+// 分类删除
 router.get("/category/delete", function (req, res) {
 
     // 获取要删除分类的 id
@@ -268,7 +269,7 @@ router.get("/category/delete", function (req, res) {
  */
 // 内容首页
 router.get("/content", function (req, res) {
-    
+
     // 同用户管理
     var page = Number(req.query.page || 1);
     var limit = 2;
@@ -284,18 +285,33 @@ router.get("/content", function (req, res) {
         var skip = (page - 1) * limit;
 
         // sort() 方法可以用来排序（1 表示升序，-1 表示降序）
-        Content.find().sort({_id: -1}).limit(limit).skip(skip).then(function (contents) {
-            res.render("admin/content_index", {
-                userinfo: req.userinfo,
-                contents: contents,
+        // 在查询的同时利用 populate() 方法来关联字段（即我们在 schemas 下的 contents 中定义的 category 字段）
+        // 如果不使用关联字段，最后生成的 category 字段的数据就和 id 一样了的（[object Object]）
+        // 使用 populate() 后生成的数据如下
+        // {
+        //     _id: 591747df48eca12e10718ed8,
+        //     category: { _id: 591714bc63385525e8a1efdc, cateName: 'javascript', __v: 0 },
+        //     title: '...',
+        //     __v: 0,
+        //     content: '...',
+        //     description: '...' 
+        // }
+        // 即分类名称我们通过 category.cateName 即可拿到
+        // 在下面就是传递过去的 contents.category.cateName 即可获得对应分类的名称
 
-                count: count,
-                limit: limit,
-                pages: pages,
-                page: page,
-                link: "/admin/content"
-            })
+        Content.find().sort({ _id: -1 }).limit(limit).skip(skip).populate("category").then(function (contents) {
+
+        res.render("admin/content_index", {
+            userinfo: req.userinfo,
+            contents: contents,
+
+            count: count,
+            limit: limit,
+            pages: pages,
+            page: page,
+            link: "/admin/content"
         })
+    })
     })
 
 })
@@ -309,10 +325,10 @@ router.get("/content/add", function (req, res) {
             categories: categories
         })
     })
-    
+
 })
 
-// 内容保存
+// 内容保存（save）
 router.post("/content/add", function (req, res) {
 
     // 验证分类
@@ -344,7 +360,99 @@ router.post("/content/add", function (req, res) {
             url: "/admin/content"
         })
     })
+
+})
+
+// 内容修改
+router.get("/content/edit", function (req, res) {
+
+    var id = req.query.id || "";
+    var categories = [];
+
+    // 读取分类内容
+    Category.find().then(function (rs) {
+
+        categories = rs;
+
+        // 读取文章内容，并且关联字段
+        return Content.findOne({
+            _id: id
+        }).populate("category")
+
+    }).then(function (content) {
+
+            if (!content) {
+                res.render("admin/error", {
+                    userinfo: req.userinfo,
+                    message: "指定内存不存在"
+                })
+                return new Promise.reject()
+            } else {
+                res.render("admin/content_edit", {
+                    userinfo: req.userinfo,
+                    categories: categories,
+                    content: content
+                })
+            }
+        })
+
+})
+
+// 编辑后的内容保存（update）
+router.post("/content/edit", function (req, res) {
+
+    var id = req.query.id || "";
     
+    // 验证分类
+    if (req.body.category == "") {
+        res.render("admin/error", {
+            userinfo: req.userinfo,
+            message: "分类不能为空"
+        })
+    }
+
+    // 验证标题
+    if (req.body.title == "") {
+        res.render("admin/error", {
+            userinfo: req.userinfo,
+            message: "标题不能为空"
+        })
+    }
+
+    Content.update({
+        _id: id
+    }, {
+        category: req.body.category,
+        title: req.body.title,
+        description: req.body.description,
+        content: req.body.content
+    }).then(function () {
+        res.render("admin/success", {
+            userinfo: req.userinfo,
+            message: "内容保存成功",
+            url: "/admin/content/edit?id=" + id
+        })
+    })
+
+    
+
+})
+
+
+// 内容删除
+router.get("/content/delete", function (req, res) {
+    // 获取要删除分类的 id
+    var id = req.query.id;
+
+    Content.remove({
+        _id: id
+    }).then(function () {
+        res.render("admin/success", {
+            userinfo: req.userinfo,
+            message: "删除成功",
+            url: "/admin/content"
+        })
+    })
 })
 
 
