@@ -1,40 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "index.layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/public/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/public/css/main.css">
-    <title>后台管理</title>
-</head>
-
-<body>
-    <div>
-        <header class="header-bar">
-            <img src="http://p1.bqimg.com/567571/b917b3d73b0e1da7.png" alt="">
-        </header>
-        <nav class="navbar navbar-default">
-            <div class="container">
-                <ul class="nav navbar-nav">
-
-                    
-                    
-                    {% for category in categories %}
-
-                    <li class="active">
-                        <a href="/">{{ category.cateName }}</a>
-                    </li>
-
-
-                    {% endfor %}
-
-                </ul>
-            </div>
-        </nav>
-    </div>
-    <div class="container container-fluid">
+{% block content%}
+<div class="container container-fluid">
         <div class="row">
             <main class="col-md-8">
                 <!-- 文章列表 -->
@@ -55,63 +22,28 @@
                             {{data.description}}
                         </div>
                         <div>
-                            <a href="/view/{{data._id.toString()}}" class="article-seemore btn btn-primary">查看文章详情</a>
+                            <a href="/view?contentid={{data.id}}" class="article-seemore btn btn-primary">查看详情</a>
                         </div>
                     </li>
 
                     {% endfor %}
                 </ul>
-                {% include "../admin/page.layout.html" %}
+
+                <nav>
+                    <ul class="pager">
+
+                        <li class="previous"><a href="/?page={{page-1}}">&larr; 上一页</a></li>
+
+                        <li class="next"><a href="/?category={{category}}&page={{page+1}}">下一页 &rarr;</a></li>
+                        
+                    </ul>
+                </nav>
+
+
             </main>
-            <aside class="col-md-4">
-                <div class="card user-about">
-                    {% if userinfo.username %} 
+            
+            {% include "login.layout.html" %}
 
-                            {{userinfo.username}} 
-
-                            {% if userinfo.isAdmin %}
-                            <a href="/admin">进入管理员页面</a> 
-                            {% endif %}
-
-                    <div class="action-bar action-bar-margin">
-                        <button class="btn btn-primary" id="logout">退出登陆</button>
-                    </div>
-
-                    {% else %}
-
-                    <form id="loginBox" class="login-wrap">
-                        <input type="text" name="username" class="form-control" placeholder="请输入用户名">
-                        <input type="password" name="password" class="form-control" placeholder="请输入密码">
-                        <div class="action-bar action-bar-margin">
-                            <button class="btn btn-primary" type="button" id="login">登录</button>
-                        </div>
-                        <div class="userform-tabbar">
-                            没有账号,去<a href="javascript:;" id="to-regsiter">注册</a>
-                        </div>
-                    </form>
-
-                    <form id="regsiterBox" class="regsiter-wrap" style="display:none">
-                        <input type="text" id="username" class="form-control" name="username" placeholder="请输入用户名">
-                        <input type="password" class="form-control" name="password" placeholder="请输入密码">
-                        <input type="password" name="passwordRepeat" class="form-control" placeholder="请重复输入密码">
-                        <div class="action-bar action-bar-margin">
-                            <button class="btn btn-primary" type="button" id="register">注册</button>
-                        </div>
-                        <div class="userform-tabbar">
-                            已有账号,去<a href="javascript:;" id="to-login">登陆</a>
-                        </div>
-                    </form>
-
-                    {% endif %}
-                </div>
-            </aside>
         </div>
     </div>
-    <footer></footer>
-
-    <script src="/public/js/jquery.js"></script>
-    <script src="/public/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/public/js/index.js"></script>
-</body>
-
-</html>
+{% endblock %}
