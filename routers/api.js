@@ -22,8 +22,6 @@ router.post("/user/register", (req, res, next) => {
     var password = req.body.password;
     var repassword = req.body.repassword;
 
-    console.log(password)
-    
     // 仅判断用户名是否已经注册
     User.findOne({
         username: username
@@ -35,7 +33,7 @@ router.post("/user/register", (req, res, next) => {
             responseData.message = "用户名已经被注册"
             res.json(responseData);
             return
-        } 
+        }
 
         // 否则，保存用户的注册信息到数据库
         var user = new User({
@@ -43,7 +41,7 @@ router.post("/user/register", (req, res, next) => {
             password: password
         })
 
-        
+
 
 
         return user.save();
@@ -61,7 +59,7 @@ router.post("/user/login", (req, res, next) => {
 
     var username = req.body.username;
     var password = req.body.password;
-    
+
     // 仅判断用户名是否已经注册
     User.findOne({
         username: username,
@@ -74,7 +72,7 @@ router.post("/user/login", (req, res, next) => {
             responseData.message = "用户名或密码错误"
             res.json(responseData);
             return
-        } 
+        }
 
 
 
@@ -85,7 +83,7 @@ router.post("/user/login", (req, res, next) => {
             _id: userinfo._id,
             username: userinfo.username
         }
-        
+
         req.cookies.set("userinfo", JSON.stringify({
             _id: userinfo._id,
             username: userinfo.username
@@ -93,14 +91,14 @@ router.post("/user/login", (req, res, next) => {
 
         res.json(responseData);
 
-        
+
 
     })
 
 })
 
 
-// 退出
+// 前台退出
 router.get("/user/logout", (req, res) => {
 
     req.cookies.set("userinfo", null);
@@ -108,10 +106,18 @@ router.get("/user/logout", (req, res) => {
 
 })
 
+// 后台退出
+router.get("/admin/logout", (req, res) => {
+    req.cookies.set("userinfo", null);
+    res.json(responseData);
+})
+
+
+
 
 // 获取查询文章的所有评论
 router.get("/commentList", function (req, res) {
-    
+
     var commentId = req.query.commentId || ""
 
     Content.findOne({
