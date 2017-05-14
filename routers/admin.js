@@ -272,7 +272,7 @@ router.get("/content", function (req, res) {
 
     // 同用户管理
     var page = Number(req.query.page || 1);
-    var limit = 2;
+    var limit = 10;
     var pages = 0;
 
     Content.count().then(function (count) {
