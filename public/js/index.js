@@ -2,7 +2,6 @@ $(function () {
     
     // 注册
     $("#register").on("click", function () {
-        console.log( $("input[name=username]").val() )
         $.ajax({
             url: "/api/user/register",
             type: "post",
