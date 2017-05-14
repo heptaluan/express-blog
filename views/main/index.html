@@ -21,7 +21,7 @@
                     
                     {% for categories in category %}
 
-                    <li>
+                    <li class="active">
                         <a href="/">{{ categories.cateName }}</a>
                     </li>
 
@@ -31,68 +31,79 @@
             </div>
         </nav>
     </div>
-
-    {% if userinfo._id %}
-    <div class="msg">
-        
-
-        {% if userinfo.isAdmin %}
-        欢迎管理员：{{ userinfo.username }}
-        <a href="/admin">进入管理</a>
-        <a href="javascript:;" class="loginout">退出</a>
-        {% else %}
-        欢迎用户：{{ userinfo.username }}
-        <a href="javascript:;" class="loginout">退出</a>
-        {% endif %}
-    </div>
-
-    {% else %}
-
-    <div class="signin2">
-        <div class="aa">
-            <div>
-                <input type="text" id="user" class="user2"> 用户
-            </div>
-            <div>
-                <input type="password" id="pwd" class="pwd2"> 密码
-            </div>
-            <input type="button" value="登录" class="btn2">
-        </div>
-    </div>
-    
-    <div class="signin">
-        <div>
-            <input type="text" id="user" class="user"> 用户
-        </div>
-        <div>
-            <input type="password" id="pwd" class="pwd"> 密码
-        </div>
-        <div>
-            <input type="password" id="pwd" class="repwd"> 确认密码
-        </div>
-        <input type="button" value="注册" class="btn">
-    </div>
-    
-
-    {% endif %}
-
-
-    <!--<div class="container container-fluid">
+    <div class="container container-fluid">
         <div class="row">
             <main class="col-md-8">
-
+                <!-- 文章列表 -->
+                <ul class="article-list">
+                    {% for data in contents %}
+                    <li class="article-item card">
+                        <h3>{{data.title}}</h3>
+                        <div class="article-timebar">
+                            <span><b>分类:</b>{{data.category.catename}}</span>
+                            <span><b>作者:</b>{{data.user.username}}</span>
+                            <span><b>发表时间:</b>{{data.addtime|date('Y年m月d日 H:i:s',-8*60)}}</span>
+                            <span><b>浏览数:</b>{{data.views}}</span>
+                        </div>
+                        <div class="article-content">
+                            {{data.description}}
+                        </div>
+                        <div>
+                            <a href="/view/{{data._id.toString()}}" class="article-seemore btn btn-primary">查看详情</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
             </main>
             <aside class="col-md-4">
+                <div class="card user-about">
+                    {% if userinfo.username %} 
 
+                            {{userinfo.username}} 
+
+                            {% if userinfo.isAdmin %}
+                            <a href="/admin">进入管理员页面</a> 
+                            {% endif %}
+
+                    <div class="action-bar action-bar-margin">
+                        <button class="btn btn-primary" id="logout">退出登陆</button>
+                    </div>
+
+                    {% else %}
+
+                    <form id="loginBox" class="login-wrap">
+                        <input type="text" name="username" class="form-control" placeholder="请输入用户名">
+                        <input type="password" name="password" class="form-control" placeholder="请输入密码">
+                        <div class="action-bar action-bar-margin">
+                            <button class="btn btn-primary" type="button" id="login">登录</button>
+                        </div>
+                        <div class="userform-tabbar">
+                            没有账号,去<a href="javascript:;" id="to-regsiter">注册</a>
+                        </div>
+                    </form>
+
+                    <form id="regsiterBox" class="regsiter-wrap" style="display:none">
+                        <input type="text" id="username" class="form-control" name="username" placeholder="请输入用户名">
+                        <input type="password" class="form-control" name="password" placeholder="请输入密码">
+                        <input type="password" name="passwordRepeat" class="form-control" placeholder="请重复输入密码">
+                        <div class="action-bar action-bar-margin">
+                            <button class="btn btn-primary" type="button" id="register">注册</button>
+                        </div>
+                        <div class="userform-tabbar">
+                            已有账号,去<a href="javascript:;" id="to-login">登陆</a>
+                        </div>
+                    </form>
+
+                    {% endif %}
+                </div>
             </aside>
         </div>
     </div>
-    <footer></footer>-->
+    <footer></footer>
 
     <script src="/public/js/jquery.js"></script>
-    <script src="/public/js/index.js"></script>
     <script src="/public/bootstrap/js/bootstrap.min.js"></script>
-    <!--<script src="/public/js/main.js"></script>-->
+    <script src="/public/js/index.js"></script>
 </body>
 
 </html>
