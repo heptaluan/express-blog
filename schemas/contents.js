@@ -26,6 +26,27 @@ module.exports = new mongoose.Schema({
     content: {
         type: String,
         default: ""
-    }
+    },
 
+    // 用户的 id （注意：定义为关联字段）
+    user: {
+        // 类型
+        type: mongoose.Schema.Types.ObjectId,
+
+        // 引用
+        ref: "User"
+    },
+
+    // 添加时间
+    addTime: {
+        type: Date,
+        default: new Date()
+    },
+
+    // 点击量，阅读数
+    views: {
+        type: Number,
+        default: 0
+    }
+    
 })

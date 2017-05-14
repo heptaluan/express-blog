@@ -299,7 +299,7 @@ router.get("/content", function (req, res) {
         // 即分类名称我们通过 category.cateName 即可拿到
         // 在下面就是传递过去的 contents.category.cateName 即可获得对应分类的名称
 
-        Content.find().sort({ _id: -1 }).limit(limit).skip(skip).populate("category").then(function (contents) {
+        Content.find().sort({ _id: -1 }).limit(limit).skip(skip).populate(["category", "user"]).then(function (contents) {
 
         res.render("admin/content_index", {
             userinfo: req.userinfo,
@@ -351,6 +351,7 @@ router.post("/content/add", function (req, res) {
     new Content({
         category: req.body.category,
         title: req.body.title,
+        user: req.userinfo._id.toString(),
         description: req.body.description,
         content: req.body.content
     }).save().then(function (rs) {
