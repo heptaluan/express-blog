@@ -37,7 +37,7 @@ router.get("/user", function (req, res, next) {
     var page = Number(req.query.page || 1);
 
     // 每页展示几条数据
-    var limit = 2;
+    var limit = 5;
 
     // 总页数
     var pages = 0;
@@ -83,7 +83,7 @@ router.get("/category", function (req, res, next) {
 
     // 同用户管理
     var page = Number(req.query.page || 1);
-    var limit = 2;
+    var limit = 5;
     var pages = 0;
 
     Category.count().then(function (count) {
@@ -122,8 +122,6 @@ router.get("/category/add", function (req, res, next) {
 router.post("/category/add", function (req, res, next) {
 
     var cateName = req.body.cateName || "";
-
-    console.log(cateName)
 
     if (cateName == "") {
         res.render("admin/error", {
@@ -218,7 +216,6 @@ router.post("/category/edit", function (req, res) {
             }
         }
     }).then(function (sameCategory) {
-        console.log(id)
         if (sameCategory) {
             res.render("admin/error", {
                 userinfo: req.userinfo,
@@ -272,7 +269,7 @@ router.get("/content", function (req, res) {
 
     // 同用户管理
     var page = Number(req.query.page || 1);
-    var limit = 10;
+    var limit = 5;
     var pages = 0;
 
     Content.count().then(function (count) {
@@ -301,17 +298,17 @@ router.get("/content", function (req, res) {
 
         Content.find().sort({ _id: -1 }).limit(limit).skip(skip).populate(["category", "user"]).then(function (contents) {
 
-        res.render("admin/content_index", {
-            userinfo: req.userinfo,
-            contents: contents,
+            res.render("admin/content_index", {
+                userinfo: req.userinfo,
+                contents: contents,
 
-            count: count,
-            limit: limit,
-            pages: pages,
-            page: page,
-            link: "/admin/content"
+                count: count,
+                limit: limit,
+                pages: pages,
+                page: page,
+                link: "/admin/content"
+            })
         })
-    })
     })
 
 })
@@ -382,20 +379,20 @@ router.get("/content/edit", function (req, res) {
 
     }).then(function (content) {
 
-            if (!content) {
-                res.render("admin/error", {
-                    userinfo: req.userinfo,
-                    message: "指定内存不存在"
-                })
-                return new Promise.reject()
-            } else {
-                res.render("admin/content_edit", {
-                    userinfo: req.userinfo,
-                    categories: categories,
-                    content: content
-                })
-            }
-        })
+        if (!content) {
+            res.render("admin/error", {
+                userinfo: req.userinfo,
+                message: "指定内存不存在"
+            })
+            return new Promise.reject()
+        } else {
+            res.render("admin/content_edit", {
+                userinfo: req.userinfo,
+                categories: categories,
+                content: content
+            })
+        }
+    })
 
 })
 
@@ -403,7 +400,7 @@ router.get("/content/edit", function (req, res) {
 router.post("/content/edit", function (req, res) {
 
     var id = req.query.id || "";
-    
+
     // 验证分类
     if (req.body.category == "") {
         res.render("admin/error", {
@@ -423,19 +420,19 @@ router.post("/content/edit", function (req, res) {
     Content.update({
         _id: id
     }, {
-        category: req.body.category,
-        title: req.body.title,
-        description: req.body.description,
-        content: req.body.content
-    }).then(function () {
-        res.render("admin/success", {
-            userinfo: req.userinfo,
-            message: "内容保存成功",
-            url: "/admin/content/edit?id=" + id
+            category: req.body.category,
+            title: req.body.title,
+            description: req.body.description,
+            content: req.body.content
+        }).then(function () {
+            res.render("admin/success", {
+                userinfo: req.userinfo,
+                message: "内容保存成功",
+                url: "/admin/content/edit?id=" + id
+            })
         })
-    })
 
-    
+
 
 })
 

@@ -1,6 +1,5 @@
 $(function () {
     
-    
     // 注册
     $("#register").on("click", function () {
         $.ajax({
@@ -13,7 +12,7 @@ $(function () {
             },
             dataType: "json",
             success: function (data) {
-                console.log(data);
+                console.log("注册成功");
             }
         })
     })
@@ -61,6 +60,18 @@ $(function () {
         })
     })
 
+    // 后台退出
+    $("#adminLogout").on("click", function () {
+        $.ajax({
+            url: "/api/admin/logout",
+            success: function (data) {
+                if (data.code == 10000) {
+                    window.location.href = "/"
+                }
+            }
+        })
+    })
+
 
     // 进入详情时获取评论列表
     var commentId = window.location.href.split("contentid=")[1];
@@ -93,6 +104,7 @@ $(function () {
         })
     })
 
+    // 渲染函数
     function renderComment (comments) {
         $("#commentNum span, .commentsLength").html(comments.length)
         var html = "";
@@ -119,13 +131,10 @@ $(function () {
         $("#comment-content").val("");
     }
 
-
+    // 格式化日期
     function formatDate (time) {
         var date = new Date(time);
         return date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDay() + "日"
     }
-
-
-    
 
 })

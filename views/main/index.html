@@ -1,50 +1,48 @@
-{% extends "index.layout.html" %}
-
-{% block content%}
+{% extends "index.layout.html" %} {% block content%}
 <div class="container container-fluid">
-        <div class="row">
-            <main class="col-md-8">
-                <!-- 文章列表 -->
-                <ul class="article-list">
-                
+    <div class="row">
+        <main class="col-md-8">
+            <!-- 文章列表 -->
+            <ul class="article-list">
 
-                    {% for data in contents %}
-                    
-                    <li class="article-item card">
-                        <h3>{{data.title}}</h3>
-                        <div class="article-timebar">
-                            <span><b>分类:</b>{{data.category.cateName}}</span>
-                            <span><b>作者:</b>{{data.user.username}}</span>
-                            <span><b>发表时间:</b>{{data.addTime|date('Y年m月d日 H:i:s',-8*60)}}</span>
-                            <span><b>浏览数:</b>{{data.views}}</span>
-                            <span><b>评论数:</b>{{data.comments.length}}</span>
-                        </div>
-                        <div class="article-content">
-                            {{data.description}}
-                        </div>
-                        <div>
-                            <a href="/view?contentid={{data.id}}" class="article-seemore btn btn-primary">查看详情</a>
-                        </div>
-                    </li>
 
-                    {% endfor %}
+                {% for data in contents %}
+
+                <li class="article-item card">
+                    <h3>{{data.title}}</h3>
+                    <div class="article-timebar">
+                        <span><b>分类:</b>{{data.category.cateName}}</span>
+                        <span><b>作者:</b>{{data.user.username}}</span>
+                        <span><b>发表时间:</b>{{data.addTime|date('Y年m月d日 H:i:s',-8*60)}}</span>
+                        <span><b>浏览数:</b>{{data.views}}</span>
+                        <span><b>评论数:</b>{{data.comments.length}}</span>
+                    </div>
+                    <div class="article-content">
+                        {{data.description}}
+                    </div>
+                    <div>
+                        <a href="/view?contentid={{data.id}}" class="article-seemore btn btn-primary">查看详情</a>
+                    </div>
+                </li>
+
+                {% endfor %}
+            </ul>
+
+            <nav>
+                <ul class="pager">
+
+                    <li class="previous"><a href="/?page={{page-1}}">&larr; 上一页</a></li>
+
+                    <li class="next"><a href="/?category={{category}}&page={{page+1}}">下一页 &rarr;</a></li>
+
                 </ul>
-
-                <nav>
-                    <ul class="pager">
-
-                        <li class="previous"><a href="/?page={{page-1}}">&larr; 上一页</a></li>
-
-                        <li class="next"><a href="/?category={{category}}&page={{page+1}}">下一页 &rarr;</a></li>
-                        
-                    </ul>
-                </nav>
+            </nav>
 
 
-            </main>
-            
-            {% include "login.layout.html" %}
+        </main>
 
-        </div>
+        {% include "login.layout.html" %}
+
     </div>
+</div>
 {% endblock %}

@@ -18,10 +18,6 @@ const Cookies = require("cookies");
 // 加载用户模型
 const User = require("./models/User");
 
-
-
-
-
 // 等同于 ==> http.createServer()
 const app = express();
 
@@ -93,17 +89,13 @@ app.use(function (req, res, next) {
     } else {
         next()
     }
-    
+
 })
 
 // 根据不同的功能划分模块
 app.use("/admin", require("./routers/admin"))
 app.use("/api", require("./routers/api"))
 app.use("/", require("./routers/main"))
-
-
-
-
 
 // 连接数据库
 mongoose.connect("mongodb://localhost:27018/blog", function (err) {

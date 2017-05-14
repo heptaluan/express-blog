@@ -1,42 +1,37 @@
-{% extends "admin.layout.html" %}
+{% extends "admin.layout.html" %} {% block main %}
 
-{% block main %}
-
-    <ol class="breadcrumb">
-        <li><a href="/admin">管理首页</a></li>
-        <li><span>分类列表</span></li>
-    </ol>
+<ol class="breadcrumb">
+    <li><a href="/admin">管理首页</a></li>
+    <li><span>分类列表</span></li>
+</ol>
 
 
-    <h3>分类列表</h3>
+<h3>分类列表</h3>
 
-    <table class="table table-hover table-striped">
+<table class="table table-hover table-striped">
 
-        <tr>
-            <th>ID</th>
-            <th>分类名称</th>
-            <th>操作</th>
-        </tr>
+    <tr>
+        <th>ID</th>
+        <th>分类名称</th>
+        <th>操作</th>
+    </tr>
 
-        {% for category in categories %}
+    {% for category in categories %}
 
-        <tr>
-            <td>{{ category.id.toString() }}</td>
-            <td>{{ category.cateName}}</td>
-            <td>
-                <a href="/admin/category/edit?id={{category.id.toString()}}">编辑</a>
-                <a href="/admin/category/delete?id={{category.id.toString()}}">删除</a>
-            </td>
-        </tr>
+    <tr>
+        <td>{{ category.id.toString() }}</td>
+        <td>{{ category.cateName}}</td>
+        <td>
+            <a href="/admin/category/edit?id={{category.id.toString()}}">编辑</a>
+            <a href="/admin/category/delete?id={{category.id.toString()}}">删除</a>
+        </td>
+    </tr>
 
-        {% endfor %}
-        
-        
-        
-    </table>
+    {% endfor %}
 
 
-    {% include "page.layout.html" %}
+
+</table>
 
 
-{% endblock %}
+{% include "page.layout.html" %} {% endblock %}

@@ -1,6 +1,4 @@
-{% extends "./admin.layout.html" %} 
-
-{% block main%}
+{% extends "./admin.layout.html" %} {% block main%}
 
 <div class="panel panel-danger">
     <div class="panel-heading">
@@ -13,14 +11,10 @@
 
         {% if url %}
 
-        <a href="{{url}}">点击跳转</a> 
+        <a href="{{url}}">点击跳转</a> {% else %}
 
-        {% else %}
+        <a href="javascript:window.history.back();">返回上一步</a> {% endif %}
 
-        <a href="javascript:window.history.back();">返回上一步</a> 
-
-        {% endif %}
-        
     </div>
 </div>
 
