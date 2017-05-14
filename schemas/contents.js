@@ -47,6 +47,12 @@ module.exports = new mongoose.Schema({
     views: {
         type: Number,
         default: 0
+    },
+
+    // 文章对应的评论
+    comments: {
+        type: Array,
+        default: []
     }
     
 })

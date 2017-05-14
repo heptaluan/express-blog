@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express();
 const User = require("../models/User");
+const Content = require("../models/Content");
 
 // 统一返回格式
 var responseData;
@@ -108,6 +109,17 @@ router.get("/user/logout", (req, res) => {
 })
 
 
+// 获取查询文章的所有评论
+router.get("/commentList", function (req, res) {
+    
+    var commentId = req.query.commentId || ""
+
+    Content.findOne({
+        _id: commentId
+    }).then(function (content) {
+        res.json(content.comments)
+    })
+})
 
 
 

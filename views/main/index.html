@@ -17,6 +17,7 @@
                             <span><b>作者:</b>{{data.user.username}}</span>
                             <span><b>发表时间:</b>{{data.addTime|date('Y年m月d日 H:i:s',-8*60)}}</span>
                             <span><b>浏览数:</b>{{data.views}}</span>
+                            <span><b>评论数:</b>{{data.comments.length}}</span>
                         </div>
                         <div class="article-content">
                             {{data.description}}

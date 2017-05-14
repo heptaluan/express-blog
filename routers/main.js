@@ -70,17 +70,48 @@ router.get("/view", function (req, res, next) {
         _id: contentid
     }).populate("user").then(function (content) {
 
-        data.content = content;
+        data.content = content; 
 
         // 更新阅读数
         content.views++;
         content.save();
 
-        
-        // console.log(data)
         res.render("main/view", data)
+
     })
 
 })
+
+
+// 评论提交
+router.post("/comment", function (req, res) {
+
+    var commentId = req.body.commentId || "";
+    
+    var resData = {
+        username: req.userinfo.username,
+        time: new Date(),
+        content: req.body.content
+    }
+
+
+    // 查询对应文章信息
+    Content.findOne({
+        _id: commentId
+    }).then(function (content) {
+
+        content.comments.push(resData);
+        return content.save();
+
+    }).then(function (newContent) {
+        res.json(newContent)
+    })
+})
+
+
+
+
+
+
 
 module.exports = router;

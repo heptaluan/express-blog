@@ -1,22 +1,47 @@
-{% extends "index.layout.html" %}
+{% extends "index.layout.html" %} {% block content%}
+<!-- 文章列表 -->
+<aside class="col-md-8">
 
-{% block content%}
-    <!-- 文章列表 -->
-    <aside class="col-md-8">
-        <div class="card article-item">
-            <h3>{{content.title}}</h3>
-            <div class="article-timebar">
-                作者：<span class="colInfo">{{content.user.username}}</span>
-                时间：<span class="colInfo">{{content.addTime|date('Y年m月d日 H:i:s',-8*60)}}</span>
-                阅读：<span class="colInfo">{{content.views}}</span>
-                评论：<span class="colInfo">10</span>
-            </div>
-            <div class="article-content">
-                {{content.content}}
-            </div>
+
+    <div class="card article-item">
+        <h3>{{content.title}}</h3>
+        <div class="article-timebar">
+            作者：<span class="colInfo">{{content.user.username}}</span> 时间：
+            <span class="colInfo">{{content.addTime|date('Y年m月d日 H:i:s',-8*60)}}</span> 阅读：
+            <span class="colInfo">{{content.views}}</span> 评论：
+            <span class="colInfo commentsLength"> {{content.comments.length}} </span>
         </div>
-    </aside>
+        <div class="article-content">
+            {{content.content}}
+        </div>
+    </div>
 
-    {% include "login.layout.html" %}
 
-{% endblock %}
+    <div class="article-content">
+
+        <div class="card comment-wrap" id="comment-list">
+            <h5 id="commentNum">评论：<span></span> 条</h5>
+            {% if !userinfo._id %}
+            <div class="not-login">
+                <h5>评论前请先登录</h5>
+            </div>
+            {% else %}
+            <div class="has-login">
+                <div class="comment-box">
+                    <textarea name="content" class="form-control" placeholder="说点什么吧" id="comment-content"></textarea>
+                    <button type="button" id="submit-comment" class="btn btn-primary action-bar-margin">提交评论</button>
+                </div>
+            </div>
+            {% endif %}
+
+            <ul class="list-group">
+
+
+            </ul>
+        </div>
+    </div>
+
+</aside>
+
+
+{% include "login.layout.html" %} {% endblock %}
